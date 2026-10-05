@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="kk" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ай-Керімге</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🌙%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1030;--bg2:#1c1745;--fg:#efeadf;--muted:#a9a6c4;--gold:#dcbc7a;--card:rgba(255,255,255,.05);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;color:var(--fg);font-family:"Noto Serif",Georgia,serif;font-weight:300;line-height:1.8;text-align:center;background:var(--bg);
+background-image:radial-gradient(1px 1px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 78% 12%,#fff,transparent),radial-gradient(1.5px 1.5px at 40% 30%,#fff9,transparent),radial-gradient(1px 1px at 88% 45%,#fff,transparent),radial-gradient(1px 1px at 6% 60%,#fff9,transparent),radial-gradient(1.5px 1.5px at 60% 72%,#fff,transparent),radial-gradient(1px 1px at 25% 88%,#fff9,transparent),linear-gradient(180deg,var(--bg),var(--bg2) 60%,var(--bg));background-attachment:fixed}
+main{max-width:600px;margin:0 auto;padding:48px 22px 64px}
+.moon{width:92px;height:92px;margin:0 auto 26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff9e3,#f2dfae);box-shadow:0 0 50px 12px rgba(246,230,184,.35);animation:glow 5s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 70px 20px rgba(246,230,184,.5)}}
+h1{font-weight:300;font-size:2rem;margin:0;letter-spacing:.04em}
+h2{font-weight:300;font-size:1.1rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin:56px 0 18px}
+.line{width:44px;height:1px;background:var(--gold);margin:20px auto}
+.quote{font-size:1.35rem;font-style:italic;color:var(--gold);margin:8px 0 26px}
+p{margin:0 0 16px}
+.small{color:var(--muted);font-size:.9rem}
+.card{background:var(--card);border:1px solid rgba(220,188,122,.18);border-radius:14px;padding:18px 16px;margin:0 0 14px;text-align:left}
+.card b{display:block;font-weight:400;text-align:center;margin-bottom:8px}
+.t{display:flex;justify-content:center;gap:14px;text-align:center}
+.t div{min-width:48px}
+.t span{display:block;font-size:1.6rem;color:var(--gold);line-height:1.2}
+.t small{color:var(--muted);font-size:.7rem}
+.sub{text-align:center;color:var(--muted);font-size:.85rem;margin:6px 0 0}
+#msg{min-height:3.2em;text-align:center;font-style:italic;color:var(--gold);font-size:1.05rem}
+label{display:block;font-size:.92rem;margin:12px 0 4px;color:var(--fg)}
+textarea,input{width:100%;font:inherit;font-size:.95rem;color:var(--fg);background:rgba(255,255,255,.07);border:1px solid rgba(220,188,122,.25);border-radius:10px;padding:9px 11px}
+textarea{min-height:64px;resize:vertical}
+button{font:inherit;font-size:.95rem;color:var(--bg);background:var(--gold);border:0;border-radius:999px;padding:9px 22px;margin-top:12px;cursor:pointer}
+.st{margin-top:8px;color:var(--muted);font-size:.82rem;text-align:center}
+.center{text-align:center}
+</style>
+</head>
+<body>
+<main>
+<div class="moon" aria-hidden="true"></div>
+<h1>Ай-Керімге</h1>
+<div class="line"></div>
+<div class="quote">«Бүгін Ай өте әдемі көрініп тұр»</div>
+<p>Кейде ең көп айтқың келетін сөзді ең үнсіз айтқың келеді. Аңыз бойынша, бір жапон жазушысы осы бір жолмен жүрек сырын жеткізіпті.</p>
+<p>Зейнабидин Асқар</p>
+
+<h2>Сені тануға бір қадам</h2>
+<div class="card" id="quiz"></div>
+<div class="center"><button id="qsend">Жауаптарды жіберу</button><div class="st" id="qst"></div></div>
+
+<h2>Мерекеге дейін</h2>
+<div id="ev"></div>
+</main>
+<script>
+var MAIL="zejnabidinaskar@gmail.com";
+function send(sub,body,st){
+  st.textContent="Жіберілуде...";
+  fetch("https://formsubmit.co/ajax/"+MAIL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({_subject:sub,_captcha:"false",_template:"box",Хабарлама:body})})
+  .then(function(r){return r.json()})
+  .then(function(d){if(d.success===true||d.success==="true")st.textContent="Жіберілді ✓ Рақмет!";else throw 0})
+  .catch(function(){
+    try{navigator.clipboard.writeText(body)}catch(e){}
+    st.textContent="Мәтін көшірілді. Пошта ашылмаса, оны "+MAIL+" адресіне жіберіңіз.";
+    window.location.href="mailto:"+MAIL+"?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(body);
+  });
+}
+// 10 questions
+var Q=["Қай түс сізге ең жақын?","Қандай жанрдағы өлең ұнайды?","Қандай гүлдерді ұнатасыз?","Қай мезгіл ең ұнайды (көктем, жаз, күз, қыс)?","Қандай музыка тыңдағанды ұнатасыз?","Сүйікті тәттіңіз немесе тағамыңыз қандай?","Қандай кітап немесе фильм жанрын қалайсыз?","Бос уақытта немен айналысқанды ұнатасыз?","Қандай жерде отырып демалғанды қалайсыз (теңіз, тау, қала, үй)?","Мінсіз кеш сіз үшін қандай болады?"];
+var qb=document.getElementById("quiz");
+Q.forEach(function(q,i){qb.insertAdjacentHTML("beforeend",'<label>'+(i+1)+'. '+q+'</label><input id="q'+i+'">')});
+document.getElementById("qsend").onclick=function(){
+  var body="Ай-Керімнің жауаптары:\n\n",any=false;
+  Q.forEach(function(q,i){var v=document.getElementById("q"+i).value.trim();if(v)any=true;body+=(i+1)+". "+q+"\n   "+(v||"-")+"\n\n"});
+  var st=document.getElementById("qst");
+  if(!any){st.textContent="Алдымен кем дегенде бір сұраққа жауап жазыңыз.";return}
+  send("Ай-Керімнің жауаптары",body,st);
+};
+// events
+var EV=[["Жаңа жыл",0,1],["Наурыз мейрамы",2,21],["8 Наурыз",2,8]];
+function next(m,d){var n=new Date(),t=new Date(n.getFullYear(),m,d);if(t<n)t=new Date(n.getFullYear()+1,m,d);return t}
+EV.sort(function(a,b){return next(a[1],a[2])-next(b[1],b[2])});
+var box=document.getElementById("ev");
+box.insertAdjacentHTML("beforeend",'<div class="card"><b>Ай әдемірек болатын сәт</b><div class="t" id="tm"></div><p class="sub">әрбір секунд сайын жаңарады, әр сағат сайын қайталанады</p></div><div class="card"><b>Осы сағаттың тұспалы</b><div id="msg"></div></div>');
+EV.forEach(function(e,i){
+  box.insertAdjacentHTML("beforeend",'<div class="card"><b>'+e[0]+'</b><div class="t" id="t'+i+'"></div><label>Бұл мейрамға не қалайсыз?</label><textarea id="w'+i+'" placeholder="Тілегіңізді жазыңыз..."></textarea><div class="center"><button data-i="'+i+'">Жіберу</button><div class="st" id="s'+i+'"></div></div></div>');
+});
+box.querySelectorAll("button").forEach(function(b){b.onclick=function(){
+  var i=+b.dataset.i,v=document.getElementById("w"+i).value.trim(),st=document.getElementById("s"+i);
+  if(!v){st.textContent="Алдымен тілегіңізді жазыңыз.";return}
+  send("Ай-Керім: "+EV[i][0]+" мейрамына тілек","«"+EV[i][0]+"» мейрамына Ай-Керімнің тілегі:\n\n"+v,st);
+}});
+var HINTS=["Айдың сұлулығын көру үшін сізге айна ғана жеткілікті.","Бүгін аспан да сізге қызғанышпен қарап тұр.","Ай жарқырағаны сізбен бір аспанның астында тұрғаны үшін болса керек.","Жұлдыздар сізді көргенде үнсіз қалады, мен сияқты.","Айға қарап тұрып, ойыма сіздің күлкіңіз түсті.","Түн қанша қараңғы болса да, сіздің аты Айдың атымен бірдей.","Бүгінгі Ай әдемі болса, ол сізбен аттас болғандықтан шығар."];
+function hh(n,off){var k=n.getFullYear()*1000000+n.getMonth()*10000+n.getDate()*100+n.getHours()+off,x=Math.sin(k*12.9898)*43758.5453;return Math.floor((x-Math.floor(x))*HINTS.length)}
+function showHint(n){var i=hh(n,0);if(i===hh(n,-1))i=(i+1)%HINTS.length;document.getElementById("msg").textContent="«"+HINTS[i]+"»"}
+var pad=function(x){return x<10?"0"+x:x},lastRem=0;
+function pr(id,v){document.getElementById(id).innerHTML=v.map(function(x){return"<div><span>"+pad(x[0])+"</span><small>"+x[1]+"</small></div>"}).join("")}
+function tick(){
+  var n=new Date(),nh=new Date(n.getFullYear(),n.getMonth(),n.getDate(),n.getHours()+1),rem=Math.floor((nh-n)/1000);
+  if(!lastRem||rem>lastRem)showHint(n);
+  lastRem=rem;pr("tm",[[Math.floor(rem/60),"минут"],[rem%60,"секунд"]]);
+  EV.forEach(function(e,i){var s=Math.max(0,Math.floor((next(e[1],e[2])-n)/1000));
+    pr("t"+i,[[Math.floor(s/86400),"күн"],[Math.floor(s%86400/3600),"сағат"],[Math.floor(s%3600/60),"минут"],[s%60,"секунд"]])});
+}
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
