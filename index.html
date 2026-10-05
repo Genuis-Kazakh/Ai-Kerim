@@ -75,7 +75,7 @@ document.getElementById("qsend").onclick=function(){
   send("Ай-Керімнің жауаптары",body,st);
 };
 // events
-var EV=[["Жаңа жыл",0,1],["Наурыз мейрамы",2,21],["8 Наурыз",2,8]];
+var EV=[["Жаңа жыл",0,1],["Наурыз мейрамы",2,21],["8 Наурыз",2,8],["Туған күн 🎂",10,17]];
 function next(m,d){var n=new Date(),t=new Date(n.getFullYear(),m,d);if(t<n)t=new Date(n.getFullYear()+1,m,d);return t}
 EV.sort(function(a,b){return next(a[1],a[2])-next(b[1],b[2])});
 var box=document.getElementById("ev");
